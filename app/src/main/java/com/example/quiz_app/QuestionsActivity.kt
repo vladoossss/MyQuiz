@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -16,13 +17,28 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
     private var mSelectedPosition: Int = 1                 // позиция выбранного ответ на вопрос
     private var mCorrectAnswers: Int = 0                   // число правильных ответов
     private var mUserName: String? = null                  // имя пользователя
+    private var mThemeNum: Int = 0                  // имя пользователя
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions)
 
         mUserName = intent.getStringExtra(Constants.USER_NAME)  // получаем имя из прошлого активити
-        mQuestionList = Constants.getQuestions()                // инициализируем список вопросов
+        mThemeNum = intent.getIntExtra(Constants.THEME_NUM, 0)  // получаем имя из прошлого активити
+        Log.d("TAG", "mThemeNum $mThemeNum")
+
+        mQuestionList = when (mThemeNum) {
+            0 -> {
+                Constants.getQuestions_1()       // инициализируем список вопросов про футбол
+            }
+            1 -> {
+                Constants.getQuestions_2()      // инициализируем список вопросов про биатлон
+            }
+            else -> {
+                Constants.getQuestions_3()      // инициализируем список вопросов про плавание
+            }
+        }
+
         setQuestion()
 
         findViewById<TextView>(R.id.tv_option_one).setOnClickListener(this)
@@ -47,7 +63,7 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         progressBar.progress = mCurrentPosition
 
         val tvProgress = findViewById<TextView>(R.id.tv_progress)
-        tvProgress.text = "$mCurrentPosition" + "/" + progressBar.max
+        tvProgress.text = "$mCurrentPosition" + "/" + mQuestionList!!.size
 
         val tvQuestion = findViewById<TextView>(R.id.tv_question)
         tvQuestion.text = question!!.question

@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
             if (name.text.toString().isEmpty()) {
                 Toast.makeText(this@MainActivity, "Введите имя:", Toast.LENGTH_SHORT).show()
             } else {
-                val intent = Intent(this@MainActivity, QuestionsActivity::class.java)
+                val intent = Intent(this@MainActivity, ThemeActivity::class.java)
                 intent.putExtra(Constants.USER_NAME, name.text.toString()) // передаем в следующее активити
                 startActivity(intent)
                 finish()

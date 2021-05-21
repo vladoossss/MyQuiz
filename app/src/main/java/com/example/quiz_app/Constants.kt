@@ -5,8 +5,9 @@ object Constants {
     const val USER_NAME:String = "user_name"
     const val ALL_QUESTIONS:String = "all_questions"
     const val CORRECT_ANSWERS:String = "correct_answers"
+    const val THEME_NUM:String = "num_of_theme"
 
-    fun getQuestions(): ArrayList<Question> {
+    fun getQuestions_1(): ArrayList<Question> {
         val questionsList = ArrayList<Question>()
 
         val que1 = Question(
@@ -128,6 +129,139 @@ object Constants {
             4
         )
         questionsList.add(que10)
+
+        return questionsList
+    }
+
+    fun getQuestions_2(): ArrayList<Question> {
+        val questionsList = ArrayList<Question>()
+
+        val que1 = Question(
+            1,
+            "Кто изображен на фото?",
+            R.drawable.fourcade,
+            "Фуркад",
+            "Свендсен",
+            "Грайс",
+            "Пайфер",
+            1
+        )
+        questionsList.add(que1)
+
+        val que2 = Question(
+            2,
+            "Кто изображен на фото?",
+            R.drawable.shipulin,
+            "Гараничев",
+            "Малышко",
+            "Шипулин",
+            "Волков",
+            3
+        )
+        questionsList.add(que2)
+
+        val que3 = Question(
+            3,
+            "Кто изображен на фото?",
+            R.drawable.bjorn,
+            "Свендсен",
+            "Бьорндаллен",
+            "Ханевольд",
+            "Бе",
+            2
+        )
+        questionsList.add(que3)
+
+        val que4 = Question(
+            4,
+            "Кто изображен на фото?",
+            R.drawable.dasha,
+            "Юрьева",
+            "Домрачева",
+            "Слепцова",
+            "Кручинкина",
+            2
+        )
+        questionsList.add(que4)
+
+        val que5 = Question(
+            5,
+            "Кто изображен на фото?",
+            R.drawable.neuner,
+            "Бергер",
+            "Хенкель",
+            "Вильхельм",
+            "Нойнер",
+            4
+        )
+        questionsList.add(que5)
+
+
+        return questionsList
+    }
+
+    fun getQuestions_3(): ArrayList<Question> {
+        val questionsList = ArrayList<Question>()
+
+        val que1 = Question(
+            1,
+            "Кто изображен на фото?",
+            R.drawable.phelps_michael,
+            "Лохте",
+            "Фелпс",
+            "Дрессел",
+            "Милак",
+            2
+        )
+        questionsList.add(que1)
+
+        val que2 = Question(
+            2,
+            "Кто изображен на фото?",
+            R.drawable.julia,
+            "Ефимова",
+            "Фесикова",
+            "Чимрова",
+            "Попова",
+            1
+        )
+        questionsList.add(que2)
+
+        val que3 = Question(
+            3,
+            "Кто изображен на фото?",
+            R.drawable.peaty,
+            "Пити",
+            "Кох",
+            "Шиманович",
+            "Эндрю",
+            1
+        )
+        questionsList.add(que3)
+
+        val que4 = Question(
+            4,
+            "Кто изображен на фото?",
+            R.drawable.dressel,
+            "Манаду",
+            "Эдриан",
+            "Дрессел",
+            "Ле кло",
+            3
+        )
+        questionsList.add(que4)
+
+        val que5 = Question(
+            5,
+            "Кто изображен на фото?",
+            R.drawable.chupkov,
+            "Пригода",
+            "Чупков",
+            "Финоченко",
+            "Векленко",
+            2
+        )
+        questionsList.add(que5)
 
         return questionsList
     }
