@@ -61,6 +61,7 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.progress = mCurrentPosition
+        progressBar.max = mQuestionList!!.size
 
         val tvProgress = findViewById<TextView>(R.id.tv_progress)
         tvProgress.text = "$mCurrentPosition" + "/" + mQuestionList!!.size
