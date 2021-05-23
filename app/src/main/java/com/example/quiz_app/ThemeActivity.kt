@@ -35,7 +35,9 @@ class ThemeActivity : AppCompatActivity() {
         list.add("Футбол")
         list.add("Биатлон")
         list.add("Плавание")
-
+        list.add("Хоккей")
+        list.add("Фигурное катание")
+        list.add("Велоспорт")
 
         return list
     }

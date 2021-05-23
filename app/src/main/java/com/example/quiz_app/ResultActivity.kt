@@ -16,7 +16,7 @@ class ResultActivity : AppCompatActivity() {
 
         val allQuestions = intent.getIntExtra(Constants.ALL_QUESTIONS, 0)
         val correctAnswers = intent.getIntExtra(Constants.CORRECT_ANSWERS, 0)
-        findViewById<TextView>(R.id.tv_score).text = "Ты ответил правильно на $correctAnswers из $allQuestions вопросов"
+        findViewById<TextView>(R.id.tv_score).text = "Вы ответили правильно на $correctAnswers из $allQuestions вопросов"
 
         findViewById<TextView>(R.id.btn_finish).setOnClickListener{
             startActivity(Intent(this, MainActivity::class.java))

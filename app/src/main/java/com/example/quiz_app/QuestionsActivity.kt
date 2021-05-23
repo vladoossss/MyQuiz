@@ -34,8 +34,17 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
             1 -> {
                 Constants.getQuestions_2()      // инициализируем список вопросов про биатлон
             }
-            else -> {
+            2 -> {
                 Constants.getQuestions_3()      // инициализируем список вопросов про плавание
+            }
+            3 -> {
+                Constants.getQuestions_4()      // инициализируем список вопросов про хоккей
+            }
+            4 -> {
+                Constants.getQuestions_5()      // инициализируем список вопросов про фигурного катания
+            }
+            else -> {
+                Constants.getQuestions_6()      // инициализируем список вопросов про велоспорт
             }
         }
 
