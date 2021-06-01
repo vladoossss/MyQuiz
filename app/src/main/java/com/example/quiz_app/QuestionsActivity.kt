@@ -1,19 +1,27 @@
 package com.example.quiz_app
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import java.net.URL
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.CollectionReference
+import okhttp3.internal.notifyAll
+
 
 class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
 
     private var mCurrentPosition: Int = 1                  // позиция текущего вопроса
-    private var mQuestionList: ArrayList<Question>? = null // список вопросов
+    private var mQuestionList: MutableList<Question>? = null // список вопросов
     private var mSelectedPosition: Int = 1                 // позиция выбранного ответ на вопрос
     private var mCorrectAnswers: Int = 0                   // число правильных ответов
     private var mUserName: String? = null                  // имя пользователя
@@ -23,38 +31,102 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions)
 
+
+
         mUserName = intent.getStringExtra(Constants.USER_NAME)  // получаем имя из прошлого активити
         mThemeNum = intent.getIntExtra(Constants.THEME_NUM, 0)  // получаем имя из прошлого активити
         Log.d("TAG", "mThemeNum $mThemeNum")
 
-        mQuestionList = when (mThemeNum) {
+        when (mThemeNum) {
             0 -> {
-                Constants.getQuestions_1()       // инициализируем список вопросов про футбол
+                var themeRef = Firebase.firestore.collection("football")
+                setThemeQuestions(themeRef)       // инициализируем список вопросов про футбол
             }
             1 -> {
-                Constants.getQuestions_2()      // инициализируем список вопросов про биатлон
+                var themeRef = Firebase.firestore.collection("biathlon")
+                setThemeQuestions(themeRef)// инициализируем список вопросов про биатлон
             }
             2 -> {
-                Constants.getQuestions_3()      // инициализируем список вопросов про плавание
+                var themeRef = Firebase.firestore.collection("swimming")
+                setThemeQuestions(themeRef)      // инициализируем список вопросов про плавание
             }
             3 -> {
-                Constants.getQuestions_4()      // инициализируем список вопросов про хоккей
+                var themeRef = Firebase.firestore.collection("hockey")
+                setThemeQuestions(themeRef)      // инициализируем список вопросов про хоккей
             }
             4 -> {
-                Constants.getQuestions_5()      // инициализируем список вопросов про фигурного катания
+                var themeRef = Firebase.firestore.collection("figure skating")
+                setThemeQuestions(themeRef)      // инициализируем список вопросов про фигурное катание
+            }
+            5 -> {
+                var themeRef = Firebase.firestore.collection("bicycling")
+                setThemeQuestions(themeRef)      // инициализируем список вопросов про фигурное катание
             }
             else -> {
-                Constants.getQuestions_6()      // инициализируем список вопросов про велоспорт
+                var themeRef = Firebase.firestore.collection("anime")
+                setThemeQuestions(themeRef)     // инициализируем список вопросов про велоспорт
             }
         }
-
-        setQuestion()
 
         findViewById<TextView>(R.id.tv_option_one).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_option_two).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_option_three).setOnClickListener(this)
         findViewById<TextView>(R.id.tv_option_four).setOnClickListener(this)
         findViewById<Button>(R.id.submit_button).setOnClickListener(this)
+    }
+
+    private fun setThemeQuestions(themeRef: CollectionReference) {
+        themeRef.addSnapshotListener { value, error ->
+
+            mQuestionList = (value!!.documents!!.map {
+
+                var mass = listOf(
+                    it.getString("FirstAns").toString(),
+                    it.getString("SecondAns").toString(),
+                    it.getString("ThirdAns").toString(),
+                    it.getString("CorrectAns").toString()
+                )  // создаем лист из 4 вариантов ответа
+
+                var number = 0 // позиция правильного ответа
+
+                var first = mass!!.random()
+                if (first == it.getString("CorrectAns").toString()) {
+                    number = 1
+                } // присваиваем рандомный ответ переменной и проверяем, является ли он правильным ответом. Убираем элемент из листа
+
+                mass = mass - first
+
+                var second = mass!!.random()
+                if (second == it.getString("CorrectAns").toString()) {
+                    number = 2
+                } // присваиваем рандомный ответ переменной и проверяем, является ли он правильным ответом. Убираем элемент из листа
+
+                mass = mass - second
+
+                var third = mass!!.random()
+                if (third == it.getString("CorrectAns").toString()) {
+                    number = 3
+                } // присваиваем рандомный ответ переменной и проверяем, является ли он правильным ответом. Убираем элемент из листа
+
+                mass = mass - third
+
+                var fourth = mass!!.random()
+                if (fourth == it.getString("CorrectAns").toString()) {
+                    number = 4
+                }// присваиваем рандомный ответ переменной и проверяем, является ли он правильным ответом
+
+                Question(
+                    it.getString("Question").toString(),
+                    it.getString("image").toString(),
+                    first,
+                    second,
+                    third,
+                    fourth,
+                    number
+                )
+            } as MutableList<Question>) // составляем лист всех вопросов
+            setQuestion()
+        }
     }
 
     private fun setQuestion() {  // передаем вопрос и ответы
@@ -75,12 +147,6 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         val tvProgress = findViewById<TextView>(R.id.tv_progress)
         tvProgress.text = "$mCurrentPosition" + "/" + mQuestionList!!.size
 
-        val tvQuestion = findViewById<TextView>(R.id.tv_question)
-        tvQuestion.text = question!!.question
-
-        val ivImage = findViewById<ImageView>(R.id.iv_img)
-        ivImage.setImageResource(question.image)
-
         val tvOptionOne = findViewById<TextView>(R.id.tv_option_one)
         tvOptionOne.text = question.firstOption
         val tvOptionTwo = findViewById<TextView>(R.id.tv_option_two)
@@ -89,6 +155,14 @@ class QuestionsActivity : AppCompatActivity(), View.OnClickListener {
         tvOptionThree.text = question.thirdOption
         val tvOptionFour = findViewById<TextView>(R.id.tv_option_four)
         tvOptionFour.text = question.fourthOption
+
+        val tvQuestion = findViewById<TextView>(R.id.tv_question)
+        tvQuestion.text = question.question
+
+        var url = URL(question.image)
+
+        val ivImage = findViewById<ImageView>(R.id.iv_img)
+        Glide.with(applicationContext).load(url).into(ivImage)
     }
 
     private fun defaultOptionsView() {  // внешний вид кнопок по умолчанию
